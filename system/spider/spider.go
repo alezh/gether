@@ -2,6 +2,8 @@ package spider
 
 import (
 	"sync"
+	"github.com/alezh/gether/system/utils"
+	"github.com/alezh/gether/config"
 )
 
 //蜘蛛规则
@@ -34,7 +36,28 @@ type Rule struct {
 	AidFunc    func(*Context, map[string]interface{}) interface{} // 通用辅助函数
 }
 
+func (s *Spider)Register()  *Spider{
+	s.status = config.STOPPED
+	return SpiderGroup.Load(s)
+}
+
 // 获取蜘蛛名称
 func (self *Spider) GetName() string {
 	return self.Name
+}
+
+// 获取蜘蛛二级标识名
+func (self *Spider) GetSubName() string {
+	self.once.Do(func() {
+		self.subName = self.GetKeyin()
+		if len([]rune(self.subName)) > 8 {
+			self.subName = utils.MakeHash(self.subName)
+		}
+	})
+	return self.subName
+}
+
+// 获取自定义配置信息
+func (self *Spider) GetKeyin() string {
+	return self.Keyin
 }
