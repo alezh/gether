@@ -22,6 +22,7 @@ type Request struct {
 	Url           string
 	Method        string
 	PostData      string
+	Action        string
 	DialTimeout   time.Duration //创建连接超时 dial tcp: i/o timeout
 	ConnTimeout   time.Duration //连接状态超时 WSARecv tcp: i/o timeout
 	EnableCookie  bool
